@@ -84,21 +84,29 @@ const createIntern = async function (req, res) {
 
 const collegeDetails = async function (req, res){
     try {
-         const {collegeName} = req.query
+         let collegeName = req.query.collegeName
 
-         const college = await collegeModel.findOne({ name: collegeName }).select({ isDeleted: 0})
-         const newCollege = JSON.parse(JSON.stringify(college))
-         if (!isValid(college)) {
-            res.status(404).send({ status: false, msg: "Not able to found college" })
+         if (!isValid(collegeName)) {
+            res.status(400).send({ status: false, msg: "Not able to found college" })
             return
-          }
-           const id = college._id
-          
-            const interns = await internModel.find({collegeId: id})
-            newCollege.interests = [...interns]
-            
-            res.status(200).send({ status: true, data: newCollege })
+        }
+        let collegeData = await collegeModel.findOne({ name: collegeName })
+        if (!isValid(collegeData)){
+            res.status(404).send({ status: false, msg: "Not able to found collegeData" })
             return
+        } else{
+            let internDetail = {
+                name: collegeData.name,
+                fullName: collegeData.fullName,
+                logoLink: collegeData.logoLink,
+                interests: []
+            }
+            let collegeId = collegeData._id
+            let appliedIntern = await internModel.find({ collegeId: collegeId }).select({ name: 1, email: 1, mobile: 1, collegeId: 1})
+            internDetail.interests = appliedIntern
+            res.status(200).send({ status: true, data: internDetail })
+        }
+           
 
     } catch (error) {
         console.log(error);
