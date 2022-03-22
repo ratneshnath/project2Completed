@@ -10,7 +10,7 @@ router.post("/colleges", collegeController.createCollege);
 
 router.post("/interns", internController.createIntern);
 
-router.get("/collegeDetails", internController.collegeDetails);
+router.get("/getCollegeDetails", internController.getCollegeDetails);
 
 
 
