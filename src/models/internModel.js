@@ -13,16 +13,9 @@ const internSchema = new mongoose.Schema({
     email: {
         type: String,
         required: "Email address is required",
-        unique: true,
-        validate: {
-            validator: function (email) {
-                if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-                    return (true)
-                }
-                alert("You have entered an invalid email address!")
-                return (false)
-            }
-        }
+        unique: true
+        
+        
     },
     mobile: {
         type: Number,

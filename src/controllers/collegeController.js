@@ -18,20 +18,36 @@ const createCollege = async function (req, res){
             return
         }
         if (!isValid(name)) {
-            res.status(400).send({ status: false, msg: "Abb name is required" })
+            res.status(400).send({ status: false, msg: "Abbreviation name is required" })
             return
         }
+        let isNameAlreadyUsed = await collegeModel.findOne({ name })
+        if (isNameAlreadyUsed) {
+           return res.status(400).send({ status: false, msg: "This name has already used" })
+        }
+        // let nameRules = /^[a-z]*$/;
+        // if (nameRules.test(name) == false){
+        //    return res.status(400).send({ status: false, msg: "Name should not have anything except letters"})
+        // }
+
+
         if (!isValid(fullName)) {
             res.status(400).send({ status: false, msg: "Full name is required" })
             return
         }
+        // let fullNameRules = /^[a-z]*$/;
+        // if (fullNameRules.test(fullName) == false){
+        //     res.status(400).send({ status: false, msg: "fullName should not have anything except letters"})
+        // }
+        
+
         if (!isValid(logoLink)) {
             res.status(400).send({ status: false, msg: "LogoLink is required"})
             return
         }
         else {
             let createdCollege = await collegeModel.create(data)
-            res.status(201).send({ data: createdCollege })
+           return res.status(201).send({ data: createdCollege })
         }
     } catch (error) {
         console.log(error);
